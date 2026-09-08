@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Clicker Game (testing random thing)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        #click-btn {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px #0056b3;
+            transition: all 0.1s ease;
+            user-select: none;
+        }
+
+        #click-btn:active {
+            box-shadow: 0 2px #0056b3;
+            transform: translateY(4px);
+        }
+
+        #click-btn:disabled {
+            background-color: #6c757d;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #reset-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #reset-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Speed Clicker</h1>
+        
+        <div class="stats">
+            <div>Time Left: <span id="timer">10</span>s</div>
+            <div>Score: <span id="score">0</span></div>
+        </div>
+
+        <button id="click-btn">CLICK HERE!</button>
+        <br>
+        <button id="reset-btn">Restart Game</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 10;
+        let gameStarted = false;
+        let timerInterval;
+
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        const clickBtn = document.getElementById('click-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        clickBtn.addEventListener('click', () => {
+            if (!gameStarted) {
+                startGame();
+            }
+
+            if (timeLeft > 0) {
+                score++;
+                scoreDisplay.textContent = score;
+            }
+        });
+
+        function startGame() {
+            gameStarted = true;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            clickBtn.disabled = true;
+            const cps = (score / 10).toFixed(1);
+            alert(`Time's up!\nTotal Clicks: ${score}\nClicks Per Second (CPS): ${cps}`);
+        }
+
+        resetBtn.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            score = 0;
+            timeLeft = 10;
+            gameStarted = false;
+            scoreDisplay.textContent = score;
+            timerDisplay.textContent = timeLeft;
+            clickBtn.disabled = false;
+        });
+    </script>
+
+</body>
+</html>
